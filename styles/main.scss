@@ -1,0 +1,49 @@
+@use 'tailwindcss/base' as *;
+@use 'tailwindcss/components' as *;
+@use 'tailwindcss/utilities' as *;
+
+
+body
+{
+  font-family: 'Nunito Sans', sans-serif;
+}
+
+.page-enter-active,
+.page-leave-active {
+  transition: all 0.5s;
+}
+.page-enter-from,
+.page-leave-to {
+  opacity: 0;
+  filter: blur(1rem);
+}
+
+$orange: orange;
+$primary: rgb(0, 129, 187);
+$sub: rgb(52, 178, 236);
+$secondory: rgb(139, 138, 138);
+
+.bg-main {
+  background-color: $primary;
+}
+
+.custom-height {
+  height: calc(100dvh - 200px);
+}
+
+.custom-animation {
+  animation: var(--animate-spin); /* spin 1s linear infinite */
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+}
+
+.el-input-number--large {
+  width: -webkit-fill-available !important;
+  min-width: 150px !important;
+}
+
+
