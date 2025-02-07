@@ -25,26 +25,26 @@
       <CartShort :key="cart.length" />
     </div>
 
-
-    <div class="hidden lg:flex lg:flex-auto lg:justify-end">
-      <NuxtLink class="text-base/6 font-semibold text-gray-900">Вход <span aria-hidden="true">&rarr;</span></NuxtLink>
-    </div>
+    <ProfileMenu class="hidden lg:flex lg:flex-auto lg:justify-end" />
   </nav>
 </header>
 
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted } from 'vue';
 import useAsset from '~/composables/useAsset';
-import { useLocalStorage } from '@vueuse/core'
+import { useLocalStorage } from '@vueuse/core';
+
+const { status } = useAuth(); 
 
 const { data, photos, getData, getPhotos } = useMarketStore();
 const { copyDataFromLS, data: cart } = useCartStore();
 const { value: localCart } = useLocalStorage('bcs-cart');
 
+
 onMounted(() => {
-  copyDataFromLS(JSON.parse(localCart));
+  if (localCart) copyDataFromLS(JSON.parse(localCart));
 })
 
 

@@ -2,7 +2,7 @@
 
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
-  devtools: { enabled: false },
+  devtools: { enabled: true },
   modules: [
     '@pinia/nuxt',
     '@nuxtjs/tailwindcss',
@@ -11,17 +11,39 @@ export default defineNuxtConfig({
     '@nuxtjs/google-fonts',
     "nuxt-lazy-hydrate",
     '@nuxt/image',
+    'nuxt-mongoose',
+    '@sidebase/nuxt-auth'
   ],
 
   imports: {
     dirs: ['stores'],
   },
 
-  googleFonts: {
-    families: {
-        'Nunito Sans': [400, 500, 600, 700],
-    },
+  mongoose: {
+    uri: process.env.MONGODB_URI + '/' + process.env.MONGODB_NAME,
+    options: {},
+    modelsDir: 'models',
+    devtools: true,
   },
+
+  auth: {
+    baseURL: process.env.NUXT_AUTH_ORIGIN,
+    originEnvKey: process.env.NUXT_AUTH_ORIGIN,
+    provider: {
+      type: 'authjs',
+    },
+    isEnabled: true,
+    disableServerSideAuth: false,
+    sessionRefresh: {
+      enablePeriodically: true,
+    }
+  },
+
+  runtimeConfig: {
+    authSecret: process.env.NUXT_AUTH_SECRET
+  },
+
+
 
   css: ['~/styles/main.scss'],
 
@@ -32,4 +54,11 @@ export default defineNuxtConfig({
       viewport: "width=device-width, initial-scale=1",
     },
   },
+  googleFonts: {
+    families: {
+        'Nunito Sans': [400, 500, 600, 700],
+    },
+  },
+
+
 })

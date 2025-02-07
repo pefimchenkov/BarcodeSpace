@@ -18,12 +18,11 @@ export const useMarketStore = defineStore('market', {
             }
 
             const { status, data } = await useFetch('/api/market');
-            console.log('status', status.value)
 
             this.data = data.value;
             this.status = status.value;
 
-            console.log('Success Data from MarketStore: ', data.value.length);
+            //console.log('Success Data from MarketStore: ', data.value.length);
             return this.data;
         },
 
@@ -36,7 +35,7 @@ export const useMarketStore = defineStore('market', {
             const { data } = await useFetch('/api/photos');
             this.photos = data.value;
 
-            console.log('Success Photos from MarketStore: ', data.value.length);
+            //console.log('Success Photos from MarketStore: ', data.value.length);
             return this.photos;
         },
 
@@ -49,19 +48,10 @@ export const useMarketStore = defineStore('market', {
             const { data } = await useFetch('/api/models');
             this.models = data.value;
 
-            console.log('Success Models from MarketStore: ', data.value.length);
+            //console.log('Success Models from MarketStore: ', data.value.length);
             return this.models;
         },
 
-        async getClasses() {
-            return
-        },
-
-        async getConditions() {
-            return
-        }
-
-       
 
     }
 })

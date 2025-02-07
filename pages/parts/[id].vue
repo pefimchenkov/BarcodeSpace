@@ -48,12 +48,11 @@ onMounted(() => {
   goods.value = data
   good.value = data.find(item => item.marketid === Number(route.params.id));
   loadingStatus.value = status;
-  console.log('good from Good Id page', good)
+
 })
 
 async function gotoBack() {
     const { history } = useRouter().options;
-    console.log(history.push('/parts'))
     await navigateTo(history.state.back);
 }
 </script>

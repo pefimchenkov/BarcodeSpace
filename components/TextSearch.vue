@@ -1,6 +1,6 @@
 <template>
     <el-input
-      v-model="search"
+      v-model="search.text"
       clearable
       size="large"
       placeholder="Поиск по тексту"
@@ -12,7 +12,7 @@
 
       <template #prepend>
         <el-select
-            v-model="category"
+            v-model="search.category"
             size="large"
             placeholder="Критерий поиска"
             style="width: 215px"
@@ -27,28 +27,35 @@
 
 <script setup>
 
-import { ref, watch } from 'vue';
+import { watch } from 'vue';
 import { Search } from '@element-plus/icons-vue';
 
 const emits = defineEmits(['searching']);
 const { goods } = defineProps(['goods']);
 
-const search = ref('');
-const category = ref('name');
+const { getSearch, setSearch, set } = useFiltersStore();
 
-watch(search, (value) => {
-    if (!value) emits('searching', goods);
+let search = getSearch();
 
-    console.log('prop', value)
-    console.log(goods.filter(item => (item.marketATLAS + item.marketIM) === value))
+watch(
+  () => ({ ...search }),
+  ({ text, category }) => {
 
     function doFilterData(prop) {
-        if (category.value === 'name') return goods.filter(item => item.marketNAME.toLowerCase().includes(prop.toLowerCase()));
-        if (category.value  === 'price') return goods.filter(item => item.priceCLIENT.toString().includes(prop.toString()));
-        if (category.value  === 'stock') return goods.filter(item => (item.marketATLAS + item.marketIM) === +prop);
+        if (!text) return goods.map(item => item.marketid);
+
+        if (category === 'name')
+          return goods.filter(item => item.marketNAME.toLowerCase().includes(prop.toLowerCase())).map(item => item.marketid);
+        if (category  === 'price')
+          return goods.filter(item => item.priceCLIENT.toString().includes(prop.toString())).map(item => item.marketid);
+        if (category  === 'stock')
+          return goods.filter(item => (item.marketATLAS + item.marketIM) === +prop).map(item => item.marketid);
     }
-    emits('searching', doFilterData(value));
-})
+
+    emits('searching', doFilterData(text));
+    
+  }, { immediate: true }
+)
 
 </script>
 

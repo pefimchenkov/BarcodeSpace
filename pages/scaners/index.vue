@@ -5,7 +5,7 @@
         <Filters
             v-if="scaners.length"
             :goods="scaners"
-            @searching="doSearch"
+            @searching="doFilters"
         />
 
         <aside v-else class="flex flex-col w-[22rem] px-5 py-8 gap-y-10  bg-white border-r rtl:border-r-0 rtl:border-l dark:bg-gray-900 dark:border-gray-700 custom-height">
@@ -23,6 +23,7 @@
                     Сканеры штрих-кода ({{ filteredScaners.length }} шт.)
                 </h1>
                 <TextSearch
+                    v-if="scaners.length"
                     class="basis-2/3"
                     :goods="scaners"
                     @searching="doSearch"
@@ -30,7 +31,7 @@
             </div>
 
             <div
-                v-if="!filteredScaners.length"
+                v-if="isVisible"
                 class="text-center relative -translate-x-1/2 -translate-y-1/2 left-1/2"
                 style="top: 40%">
                 <Loader />
@@ -43,20 +44,48 @@
 </template>
 
 <script setup>
+import { onMounted, ref, reactive, computed, watch } from 'vue';
 
-import { onMounted, ref } from 'vue';
+const { getIntersection } = useFiltersStore();
 
 const scaners = ref([]);
 const filteredScaners = ref([]);
+
+definePageMeta({
+  name: "scaners",
+  breadcrumbs: "Сканеры штрих-кода",
+});
+
+const state = reactive({
+    searchData: [],
+    filtersData: [],
+});
+
+const isVisible = computed(() => {
+    return !filteredScaners.value.length && Array.isArray(filteredScaners.value)
+})
+
+watch(
+    () => ({ ...state }),
+    ({ searchData, filtersData }) => {
+        const ids = getIntersection(searchData, filtersData);
+        filteredScaners.value = scaners.value.filter(item => ids.includes(item.marketid));
+    }
+)
 
 onMounted(() => {
     const { data } = useMarketStore();
     filteredScaners.value = scaners.value = data.filter(item => item.marketTypeID === 5);
 })
 
-function doSearch(value) {
-    filteredScaners.value = value;
+function doFilters(data) {
+    state.filtersData = data;
 }
+
+function doSearch(data) {
+    state.searchData = data;
+}
+
 
 
 

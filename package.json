@@ -11,8 +11,12 @@
   },
   "dependencies": {
     "@nuxt/image": "^1.9.0",
+    "bcrypt": "^5.1.1",
+    "jsonwebtoken": "^9.0.2",
+    "next-auth": "^4.21.1",
     "nuxt": "^3.15.1",
     "nuxt-lazy-hydrate": "^1.0.0",
+    "nuxt-mongoose": "^1.0.6",
     "vue": "latest",
     "vue-router": "latest"
   },
@@ -21,6 +25,8 @@
     "@nuxtjs/google-fonts": "^3.2.0",
     "@nuxtjs/tailwindcss": "^6.13.1",
     "@pinia/nuxt": "^0.9.0",
+    "@sidebase/nuxt-auth": "^0.10.0",
+    "@types/bcrypt": "^5.0.2",
     "@vueuse/nuxt": "^12.4.0",
     "sass": "^1.83.4",
     "sass-loader": "^16.0.4"

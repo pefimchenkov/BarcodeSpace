@@ -20,7 +20,8 @@ export const useCartStore = defineStore('cart', {
                 id: marketid,
                 name: marketNAME,
                 price: priceCLIENT,
-                qty: qty
+                qty: qty,
+                isInOrder: false
             }
 
             if (isInCart) {
@@ -36,7 +37,7 @@ export const useCartStore = defineStore('cart', {
         },
 
         copyDataFromLS(payload) {
-            console.log('payload', payload)
+            console.log('Cart', payload)
             this.data = payload
         },
 

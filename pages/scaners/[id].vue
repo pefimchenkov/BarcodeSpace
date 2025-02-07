@@ -34,21 +34,27 @@
 
 <script setup>
 import useAsset from "~/composables/useAsset";
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, toRaw } from 'vue';
+const route = useRoute();
+
 
 let good = ref();
 let goods = ref([]);
-let loadingStatus = ref('pending')
+let loadingStatus = ref('pending');
+
+
 
 onMounted(() => {
   const { data, status } = useMarketStore();
-  const route = useRoute();
-  console.log(route.params.id)
-
-  goods.value = data
+  
+  goods.value = data;
   good.value = data.find(item => item.marketid === Number(route.params.id));
   loadingStatus.value = status;
-  console.log('good from Good Id page', good)
+
+  definePageMeta({
+    name: 'detail',
+    breadcrumbs: 'Товар № ' // + route.params.id
+  })
 })
 
 async function gotoBack() {

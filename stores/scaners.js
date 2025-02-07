@@ -11,7 +11,7 @@ export const useScanersStore = defineStore('scaners', {
             if (this.data.length) return this.data;
 
             const { status, data } = await useLazyFetch('/api/scaners');
-            console.log('status', status.value)
+            //console.log('status', status.value)
 
             this.data = data.value;
             this.status = status.value;

@@ -8,7 +8,7 @@
             process-status="finish"
             finish-status="success"
         >
-            <el-step title="Корзина" />
+            <el-step @click="gotoCart" title="Корзина" class="cursor-pointer" />
             <el-step title="Оформление заказа" />
             <el-step title="Оплата" />
         </el-steps>
@@ -93,14 +93,13 @@
                     </svg>
                 </button>
 
-                <div class="relative w-full">
+                <div class="relative w-full"> <!-- pattern="\([0-9]{3}\)[0-9]{3}-[0-9]{2}-[0-9]{2}" -->
                     <input
                         type="text"
                         id="phone-input"
                         class="z-20 block w-full rounded-e-lg border border-s-0 border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:border-s-gray-700  dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500"
-                        pattern="\([0-9]{3}\)[0-9]{3}-[0-9]{2}-[0-9]{2}"
+                        
                         placeholder="(999)999-99-99"
-                        required
                     />
                 </div>
               </div>
@@ -244,7 +243,12 @@
         <div class="mt-11">
           <label for="voucher" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"> Введите промокод, подарочную карту или ваучер </label>
           <div class="flex max-w-md items-center gap-4">
-            <input type="text" id="voucher" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500" placeholder="" required />
+            <input
+              type="text"
+              id="voucher"
+              class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
+              placeholder=""
+            />
             <button type="button" class="flex items-center justify-center rounded-lg bg-sky-500 px-5 py-2.5 text-sm font-medium text-white hover:bg-sky-600 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
                 Применить
             </button>
@@ -281,7 +285,10 @@
         </div>
 
         <div class="space-y-3">
-          <button @submit="submit" type="submit" class="flex w-full items-center justify-center rounded-lg bg-green-500 px-5 py-2.5 text-sm font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-4  focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+          <button
+            @click="handleSubmit"
+            type="button"
+            class="flex w-full items-center justify-center rounded-lg bg-green-500 px-5 py-2.5 text-sm font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-4  focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
             Перейти к оплате
           </button>
           <p class="text-sm font-normal text-gray-400 dark:text-gray-400">Нажимая на кнопку, вы соглашаетесь с Условиями обработки персональных данных, а также с Условиями продажи</p>
@@ -308,7 +315,11 @@ const calcTotal = computed(() => {
 
 const tax = computed(() => ((calcSum() * 0.2)));
 
-/* **** */
+async function gotoCart() {
+  await navigateTo({ path: "/cart" })
+}
+
+/* ************** */
 
 function formatPrice(price) {
     return price.toLocaleString("ru", { style: "currency", currency: "RUB" });
@@ -318,11 +329,27 @@ function calcSum() {
     return getData().reduce((acc, { price, qty }) => { return (acc + price * qty) }, 0);
 }
 
-async function submitForm(e) {
-    e.preventDefault();
-    console.log(e.target.value)
 
-    navigateTo('/confirmation')
+/* ************* */
+async function handleSubmit() {
+    
+  try {
+    const order = getData().filter(item => item.isInOrder)
+
+    console.log(order)
+
+    await useFetch('/api/order', {
+        method: 'POST',
+        body: order
+    })
+    
+    await navigateTo('/confirmation')
+  }
+  catch(error) {
+    console.log('error from create order', error)
+  }
+  finally {}
+
 }
 
 
