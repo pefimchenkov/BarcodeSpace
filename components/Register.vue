@@ -86,10 +86,19 @@ async function handleFormSubmit() {
 
         console.log(form)
 
-        await useFetch('/api/auth/register', {
+        const res = await useFetch('/api/auth/register', {
             method: 'POST',
             body: form
         })
+
+        console.log()
+
+        if (res?.error?.value?.data?.statusCode === 500) {
+          useRouter().push({
+            name: "register"
+        })
+          return ElNotification({ type: "error", message: res?.error?.value?.data?.message })
+        }
 
         useRouter().push({
             name: "login"

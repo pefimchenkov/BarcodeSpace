@@ -23,7 +23,10 @@
           <div class="space-y-6">
 
             <div v-if="!getData().length">
-              <div v-for="row in 3"  class="flex w-xl mx-auto max-w-screen-xl px-4 2xl:px-0">
+              <div 
+              v-for="(row, i) in 3"
+              :key="i"
+              class="flex w-xl mx-auto max-w-screen-xl px-4 2xl:px-0">
                 <el-skeleton-item variant="image" animated class="m-3" style="width: 120px; height: 100px; background: #f5f5f5" />
                 <el-skeleton :rows="2" animated class="m-3" />
               </div>
@@ -31,14 +34,13 @@
 
             <div
               v-for="item in getData()"
+              :key="item.id"
               class="rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800 md:p-6">
               <div class="space-y-4 md:flex md:items-center md:justify-between md:gap-6 md:space-y-0">
 
-                <el-checkbox
+                <input type="checkbox"
                   v-model="item.isInOrder"
-                >
-                </el-checkbox>
-
+                />
                 <a href="#" class="shrink-0 md:order-1">
                   <img class="h-20 w-20 dark:hidden" src="https://flowbite.s3.amazonaws.com/blocks/e-commerce/imac-front.svg" alt="imac image" />
                   <img class="hidden h-20 w-20 dark:block" src="https://flowbite.s3.amazonaws.com/blocks/e-commerce/imac-front-dark.svg" alt="imac image" />
@@ -98,7 +100,8 @@
             <div
               class="mt-6 grid grid-cols-3 gap-4 sm:mt-8">
               <div
-                  v-for="item in 3"
+                  v-for="(item, i) in 3"
+                  :key="i"
                   class="space-y-6 overflow-hidden rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
                   <a href="#" class="overflow-hidden rounded">
                       <img class="mx-auto h-44 w-44 dark:hidden" src="https://flowbite.s3.amazonaws.com/blocks/e-commerce/imac-front.svg" alt="imac image" />
@@ -127,7 +130,7 @@
                           В избранное
                       <div class="tooltip-arrow" data-popper-arrow></div>
                       </div>
-                      <button type="button" class="inline-flex w-full items-center justify-center rounded-lg bg-sky-500 px-5 py-2.5 text-sm font-medium  text-white hover:bg-sky-600 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-sky-500 dark:hover:bg-sky-600 dark:focus:ring-primary-800">
+                      <button type="button" class="inline-flex w-full items-center justify-center rounded-lg bg-sky-500 px-5 py-2.5 text-sm font-medium  text-white hover:bg-sky-600 focus:outline-none focus:ring-4 focus:ring-sky-300 dark:bg-sky-500 dark:hover:bg-sky-600 dark:focus:ring-sky-800">
                       <svg class="-ms-2 me-2 h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                           <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 4h1.5L9 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-8.5-3h9.25L19 7h-1M8 7h-.688M13 5v4m-2-2h4" />
                       </svg>
@@ -181,14 +184,15 @@
             </div>
 
             <button
-              @click="gotoCheckout"
-              class="flex w-full items-center justify-center rounded-lg bg-green-500 px-5 py-2.5 text-sm font-medium text-white hover:bg-green-600 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-sky-600 dark:hover:bg-sky-600 dark:focus:ring-primary-800">
+              @click.stop="gotoCheckout"
+              :disabled="checkIsInOrder"
+              class="disabled:bg-gray-400 disabled:cursor-not-allowed flex w-full items-center justify-center rounded-lg bg-green-500 px-5 py-2.5 text-sm font-medium text-white hover:bg-green-600 focus:outline-none focus:ring-4 focus:ring-sky-300 dark:bg-sky-600 dark:hover:bg-sky-600 dark:focus:ring-primary-800">
               Перейти к оформлению
           </button>
 
             <div class="flex items-center justify-center gap-2">
               <span class="text-sm font-normal text-gray-500 dark:text-gray-400"> или </span>
-              <a @click="gotoBack" title="" style="cursor: pointer" class="inline-flex items-center gap-2 text-sm font-medium text-primary-700 underline hover:no-underline dark:text-primary-500">
+              <a @click="gotoBack" title="" style="cursor: pointer" class="inline-flex items-center gap-2 text-sm font-medium text-sky-700 underline hover:no-underline dark:text-sky-500">
                 Продолжить покупки
                 <svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                   <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 12H5m14 0-4 4m4-4-4-4" />
@@ -201,11 +205,11 @@
             <form class="space-y-4">
               <div>
                 <label for="voucher" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"> Есть ваучер или скидочный купон? </label>
-                <input type="text" id="voucher" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500" placeholder="" required />
+                <input type="text" id="voucher" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-sky-500 focus:ring-sky-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-sky-500 dark:focus:ring-sky-500" placeholder="" required />
               </div>
               <button
                   type="submit"
-                  class="flex w-full items-center justify-center rounded-lg bg-sky-500 px-5 py-2.5 text-sm font-medium text-white hover:bg-sky-600 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-sky-600 dark:hover:bg-sky-600 dark:focus:ring-primary-800">
+                  class="flex w-full items-center justify-center rounded-lg bg-sky-500 px-5 py-2.5 text-sm font-medium text-white hover:bg-sky-600 focus:outline-none focus:ring-4 focus:ring-sky-300 dark:bg-sky-600 dark:hover:bg-sky-600 dark:focus:ring-sky-800">
                   Применить код
               </button>
             </form>
@@ -220,6 +224,10 @@
 import { ref, computed } from 'vue'
 const { getData, removeData } = useCartStore();
 
+/* definePageMeta({
+  breadcrumbs: "Корзина"
+})
+ */
 const discount = ref(1000);
 const delivery = ref(500);
 
@@ -230,6 +238,10 @@ async function removeItem(id) {
 const calcTotal = computed(() => {
     return calcSum() - discount.value  + delivery.value;
 });
+
+const checkIsInOrder = computed(() => {
+  return getData().every(item => !item.isInOrder)
+})
 
 const tax = computed(() => ((calcSum() * 0.2)));
 
@@ -249,10 +261,9 @@ async function gotoBack() {
 }
 
 async function gotoCheckout() {
-    await navigateTo('/checkout')
+  console.log('go to /checkout')
+  await navigateTo('/checkout')
 }
-
-
 
 
 

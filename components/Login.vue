@@ -92,8 +92,6 @@ const form = reactive({
 
 let isLoading = ref(false);
 
-console.log('route', route)
-
 async function handleLogin() {
 
     try {

@@ -10,7 +10,7 @@ export interface OrderDocument extends Document {
 
 const OrderSchema = new Schema({
     userid: {
-        type: mongoose.Schema.Types.ObjectId, ref: "Users"
+        type: mongoose.Schema.Types.ObjectId,
     },
 
     price: {

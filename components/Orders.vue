@@ -5,6 +5,8 @@
           <div class="gap-4 sm:flex sm:items-center sm:justify-between">
               <h2 class="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">Мои заказы</h2>
 
+              {{ orders }}
+
               <div class="mt-6 gap-4 space-y-4 sm:mt-0 sm:flex sm:items-center sm:justify-end sm:space-y-0">
               <div>
                   <label for="order-type" class="sr-only mb-2 block text-sm font-medium text-gray-900 dark:text-white">Выберите тип заказа</label>
@@ -37,6 +39,7 @@
               
                   <div
                     v-for="order in orders"
+                    :key="order.id"
                     class="flex flex-wrap items-center gap-y-4 py-6">
                     <dl class="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
                       <dt class="text-base font-medium text-gray-500 dark:text-gray-400">№:</dt>
@@ -155,7 +158,11 @@
 <script setup>
 import { reactive } from "vue"
 
-const orders = reactive([
+defineProps({
+  orders: Array
+})
+
+/* const orders = reactive([
   { id: 123456, date: '01.02.2025', price: 23456, status: 'Создан' },
   { id: 123456, date: '12.01.2025', price: 1426, status: 'В пути' },
   { id: 123456, date: '24.01.2025', price: 856, status: 'В пути' },
@@ -164,7 +171,7 @@ const orders = reactive([
   { id: 123456, date: '05.12.2024', price: 132567, status: 'Предзаказ' },
   { id: 123456, date: '18.01.2025', price: 666, status: 'В пути' },
   { id: 123456, date: '22.01.2025', price: 12345, status: 'Отменён' },
-])
+]) */
 
 function setId() {
   return Math.random(0,9) * 123578

@@ -5,8 +5,10 @@ export default defineEventHandler(async (event) => {
   
   const body = await readBody(event);
 
+  console.log(body)
 
-  if (!body.length) {
+
+  if (!body.order.length) {
     throw createError({
       statusCode: 400,
       statusMessage: "Bad Request",
@@ -14,15 +16,18 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const price = body.reduce((acc: number, item: { price: number }) => {
-    return (acc + item.price);
+  const totalPrice = body.order.reduce((acc: number, item: { price: number, qty: number }) => {
+    return (acc + (item.price * item.qty));
   }, 0)
 
+  console.log(totalPrice)
+
   const data = {
-    price,
+    userid: body.userid,
+    price: totalPrice,
     date: new Date(),
     status: 'Создан',
-    goods: body
+    goods: body.order
   }
 
   const order = await Order.create(data);

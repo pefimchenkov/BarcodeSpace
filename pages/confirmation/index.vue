@@ -9,9 +9,11 @@
 
 <script setup>
 
-const { data: goods } = useCartStore();
+const { getData } = useCartStore();
 
-if (!goods.length) await navigateTo('/')
+getData().forEach(element => {
+    element.isInOrder = false;
+});
 
 
 </script>
