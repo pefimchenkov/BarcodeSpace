@@ -5,9 +5,6 @@ export default defineEventHandler(async (event) => {
   
   const body = await readBody(event);
 
-  console.log(body)
-
-
   if (!body.order.length) {
     throw createError({
       statusCode: 400,
@@ -20,7 +17,6 @@ export default defineEventHandler(async (event) => {
     return (acc + (item.price * item.qty));
   }, 0)
 
-  console.log(totalPrice)
 
   const data = {
     userid: body.userid,

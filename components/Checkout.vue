@@ -304,6 +304,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 const { getData } = useCartStore();
+const { createOrder } = useOrdersStore();
 
 const discount = ref(1000);
 const delivery = ref(500);
@@ -335,18 +336,14 @@ async function handleCreateOrder() {
   try {
     const order = getData().filter(item => item.isInOrder)
 
-    console.log(order)
+    //console.log(order)
 
     const auth = useAuth();
     const { user } = await auth.getSession();
 
     if (!user) return ElNotification({ type: "error", message: "Войдите или зарегистрируйтесь, пожалуйста." })
 
-    await useFetch('/api/order', {
-        method: 'POST',
-        watch: false,
-        body: { userid:  user._id, order}
-    })
+    await createOrder(user._id, order);
     
     await navigateTo('/confirmation')
   }

@@ -8,13 +8,13 @@
                 style="top: 40%">
                 <Loader />
             </div>
-            <Orders v-else :orders="orders" />
+            <Orders :orders="orders" />
         </div>
     </div>
 </template>
 
 <script setup>
-import { onMounted, ref, toRaw } from 'vue';
+import { ref, toRaw } from 'vue';
 
 const auth = useAuth();
 const { user } = await auth.getSession();
@@ -27,9 +27,9 @@ async function getOrders() {
     })
 }
 
-const { status, data } = await getOrders();
+const { data } = await getOrders();
 orders.value = toRaw(data.value);
-console.log(orders.value)
-console.log(toRaw(status.value))
+// console.log(orders.value)
+// console.log(toRaw(status.value))
 
 </script>

@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { ElNotification } from 'element-plus'
 import { toRaw } from 'vue'
-import { useLocalStorage } from '@vueuse/core'
+import { useStorage } from '@vueuse/core'
 
 export const useCartStore = defineStore('cart', {
     state: () => ({
@@ -11,6 +11,10 @@ export const useCartStore = defineStore('cart', {
     actions: {
         getData() {
             return this.data;
+        },
+
+        copyDataFromLS(payload) {
+            this.data = payload
         },
 
         addData({ marketid, priceCLIENT, marketNAME,  }, qty = 1) {
@@ -30,19 +34,27 @@ export const useCartStore = defineStore('cart', {
                 this.data.push(order)
             }
 
-            useLocalStorage('bcs-cart', toRaw(this.data))
+            const state = useStorage('bcs-cart');
+            state.value = JSON.stringify(toRaw(this.data));
             
             ElNotification({ type: "success", message: "Позиция добавлена в корзину", duration: 1500 })
 
         },
 
-        copyDataFromLS(payload) {
-            console.log('Cart', payload)
-            this.data = payload
+        getDataFromLS() {
+            const { value } = useStorage('bcs-cart');
+            return value;
         },
 
+
         removeData(id) {
-            this.data = this.data.filter(item => item.id !== id);
+            const data = this.data.filter(item => item.id !== id);
+            const state = useStorage('bcs-cart');
+            state.value = JSON.stringify(toRaw(data));
+
+            ElNotification({ type: "success", message: "Позиция удалена из корзины", duration: 1500 });
+
+            this.copyDataFromLS(data)
         }
     }
 })

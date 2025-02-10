@@ -34,17 +34,15 @@
 <script setup>
 import { onMounted } from 'vue';
 import useAsset from '~/composables/useAsset';
-import { useLocalStorage } from '@vueuse/core';
 
-const { status } = useAuth(); 
 
 const { data, photos, getData, getPhotos } = useMarketStore();
-const { copyDataFromLS, data: cart } = useCartStore();
-const { value: localCart } = useLocalStorage('bcs-cart');
+const { copyDataFromLS, getDataFromLS, data: cart } = useCartStore();
 
 
 onMounted(() => {
-  if (localCart) copyDataFromLS(JSON.parse(localCart));
+  const data = getDataFromLS();
+  if (data) copyDataFromLS(JSON.parse(data));
 })
 
 

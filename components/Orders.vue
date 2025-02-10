@@ -5,7 +5,6 @@
           <div class="gap-4 sm:flex sm:items-center sm:justify-between">
               <h2 class="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">Мои заказы</h2>
 
-              {{ orders }}
 
               <div class="mt-6 gap-4 space-y-4 sm:mt-0 sm:flex sm:items-center sm:justify-end sm:space-y-0">
               <div>
@@ -39,18 +38,18 @@
               
                   <div
                     v-for="order in orders"
-                    :key="order.id"
+                    :key="order._id"
                     class="flex flex-wrap items-center gap-y-4 py-6">
                     <dl class="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
                       <dt class="text-base font-medium text-gray-500 dark:text-gray-400">№:</dt>
                       <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">
-                        <a href="#" class="hover:underline">{{ order.id }}</a>
+                        <a href="#" class="hover:underline">{{ order._id.slice(16, -1) }}</a>
                       </dd>
                     </dl>
 
                     <dl class="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
                       <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Дата:</dt>
-                      <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">{{ order.date }}</dd>
+                      <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">{{ formatDate(order.date) }}</dd>
                     </dl>
 
                     <dl class="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
@@ -106,16 +105,18 @@
                         class="w-full rounded-lg border border-red-700 px-3 py-2 text-center text-sm font-medium text-red-700 hover:bg-red-700 hover:text-white focus:outline-none focus:ring-4 focus:ring-red-300 dark:border-red-500 dark:text-red-500 dark:hover:bg-red-600 dark:hover:text-white dark:focus:ring-red-900 lg:w-auto">
                         Отмена заказа
                       </button>
-                      <a href="#" class="w-full inline-flex justify-center rounded-lg  border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700 lg:w-auto">
+                      <NuxtLink
+                        :to="`/${route.name}/${order._id}`"
+                        class="w-full inline-flex justify-center rounded-lg  border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700 lg:w-auto">
                         Подробнее
-                      </a>
+                      </NuxtLink>
                     </div>
                   </div>
 
               </div>
             </div>
 
-          <nav class="mt-6 flex items-center justify-center sm:mt-8" aria-label="Page navigation example">
+          <!-- <nav class="mt-6 flex items-center justify-center sm:mt-8" aria-label="Page navigation example">
               <ul class="flex h-8 items-center -space-x-px text-sm">
               <li>
                   <a href="#" class="ms-0 flex h-8 items-center justify-center rounded-s-lg border border-e-0 border-gray-300 bg-white px-3 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
@@ -149,8 +150,9 @@
                   </a>
               </li>
               </ul>
-          </nav>
-          </div>
+          </nav> -->
+
+        </div>
       </div>
 </section>
 </template>
@@ -162,23 +164,15 @@ defineProps({
   orders: Array
 })
 
-/* const orders = reactive([
-  { id: 123456, date: '01.02.2025', price: 23456, status: 'Создан' },
-  { id: 123456, date: '12.01.2025', price: 1426, status: 'В пути' },
-  { id: 123456, date: '24.01.2025', price: 856, status: 'В пути' },
-  { id: 123456, date: '03.02.2025', price: 2321, status: 'Предзаказ' },
-  { id: 123456, date: '14.11.2024', price: 100000, status: 'Подтверждён' },
-  { id: 123456, date: '05.12.2024', price: 132567, status: 'Предзаказ' },
-  { id: 123456, date: '18.01.2025', price: 666, status: 'В пути' },
-  { id: 123456, date: '22.01.2025', price: 12345, status: 'Отменён' },
-]) */
+const route = useRoute();
 
-function setId() {
-  return Math.random(0,9) * 123578
+
+function formatDate(value) {
+  return new Date(value)?.toLocaleDateString("ru", { hour: "2-digit", minute: "2-digit" })
 }
 
 function formatPrice(value) {
-  return value.toLocaleString('ru', { style: "currency", currency: 'RUB' })
+  return value?.toLocaleString('ru', { style: "currency", currency: 'RUB' })
 }
 
 </script>
