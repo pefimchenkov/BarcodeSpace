@@ -42,8 +42,11 @@
                   v-model="item.isInOrder"
                 />
                 <a href="#" class="shrink-0 md:order-1">
-                  <img class="h-20 w-20 dark:hidden" src="https://flowbite.s3.amazonaws.com/blocks/e-commerce/imac-front.svg" alt="imac image" />
-                  <img class="hidden h-20 w-20 dark:block" src="https://flowbite.s3.amazonaws.com/blocks/e-commerce/imac-front-dark.svg" alt="imac image" />
+                  <img
+                    class="h-20 w-20 dark:hidden"
+                    :src="item.photo || useAsset('nophoto.png')"
+                    alt="imac image"
+                  />
                 </a>
 
                 <label for="counter-input" class="sr-only">Выберите количество:</label>
@@ -166,10 +169,6 @@
                   <dd class="text-base font-medium text-green-600">{{ formatPrice(discount) }}</dd>
                 </dl>
 
-                <dl class="flex items-center justify-between gap-4">
-                  <dt class="text-base font-normal text-gray-500 dark:text-gray-400">Доставка</dt>
-                  <dd class="text-base font-medium text-gray-900 dark:text-white">{{ formatPrice(delivery) }}</dd>
-                </dl>
 
                 <dl class="flex items-center justify-between gap-4">
                   <dt class="text-base font-normal text-gray-500 dark:text-gray-400">Включая НДС</dt>
@@ -222,21 +221,21 @@
 
 <script setup>
 import { ref, computed } from 'vue'
+import useAsset from "~/composables/useAsset";
 const { getData, removeData } = useCartStore();
 
 /* definePageMeta({
   breadcrumbs: "Корзина"
 })
  */
-const discount = ref(1000);
-const delivery = ref(500);
+const discount = ref(0);
 
 async function removeItem(id) {
     removeData(id);
 }
 
 const calcTotal = computed(() => {
-    return calcSum() - discount.value  + delivery.value;
+    return (calcSum() - discount.value);
 });
 
 const checkIsInOrder = computed(() => {
@@ -252,12 +251,16 @@ function formatPrice(price) {
 }
 
 function calcSum() {
-    return getData().reduce((acc, { price, qty }) => { return (acc + price * qty) }, 0);
+    return getData().reduce((acc, { price, qty }) => { return (acc + (price * qty)) }, 0);
 }
 
 async function gotoBack() {
     const { history } = useRouter().options;
     await navigateTo(history.state.back)
+}
+
+function getFirstPhoto() {
+  
 }
 
 async function gotoCheckout() {

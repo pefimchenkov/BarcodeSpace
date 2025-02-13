@@ -16,9 +16,21 @@
     </div>
 
     <div class="hidden lg:flex lg:flex-auto lg:gap-x-12">
-      <NuxtLink class="text-base/6 font-semibold font-size-2 text-gray-900">О нас</NuxtLink>
-      <NuxtLink to="/" class="text-base/6 font-semibold text-gray-900">Каталог</NuxtLink>
-      <NuxtLink class="text-base/6 font-semibold text-gray-900">Доставка</NuxtLink>
+      <NuxtLink to="/about" class="text-base/6 font-semibold font-size-2 text-gray-900">О нас</NuxtLink>
+
+      <el-dropdown placement="bottom">
+        <NuxtLink to="/" class="text-base/6 font-semibold text-gray-900">Каталог</NuxtLink>
+        <template #dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item><NuxtLink to="/terminals" class="text-base/6 text-gray-900">Терминалы сбора данных</NuxtLink></el-dropdown-item>
+            <el-dropdown-item><NuxtLink to="/scaners" class="text-base/6 text-gray-900">Сканеры штрих-кодов</NuxtLink></el-dropdown-item>
+            <el-dropdown-item><NuxtLink to="/printers" class="text-base/6 text-gray-900">Принтеры этикеток</NuxtLink></el-dropdown-item>
+            <el-dropdown-item><NuxtLink to="/parts" class="text-base/6 text-gray-900">ЗИП и Аксессуары</NuxtLink></el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
+
+      <NuxtLink to="/delivery" class="text-base/6 font-semibold text-gray-900">Доставка</NuxtLink>
     </div>
 
     <div class="hidden lg:flex lg:flex-auto lg:justify-end">

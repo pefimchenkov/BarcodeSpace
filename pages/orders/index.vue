@@ -29,7 +29,5 @@ async function getOrders() {
 
 const { data } = await getOrders();
 orders.value = toRaw(data.value);
-// console.log(orders.value)
-// console.log(toRaw(status.value))
 
 </script>

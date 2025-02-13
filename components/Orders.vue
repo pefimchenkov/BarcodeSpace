@@ -1,7 +1,7 @@
 <template>
   <section class="bg-white py-8 antialiased dark:bg-gray-900 md:py-16">
-      <div class="mx-auto max-w-screen-xl px-4 2xl:px-0">
-          <div class="mx-auto max-w-5xl">
+      <div class="mx-auto max-w-screen-xl px-2 2xl:px-0">
+          <div class="mx-auto max-w-7xl">
           <div class="gap-4 sm:flex sm:items-center sm:justify-between">
               <h2 class="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">Мои заказы</h2>
 
@@ -40,6 +40,28 @@
                     v-for="order in orders"
                     :key="order._id"
                     class="flex flex-wrap items-center gap-y-4 py-6">
+
+                    <dl class="w-full grid sm:grid-cols-2 lg:flex lg:w-72 lg:items-center lg:justify-start gap-2">
+                      <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">
+
+                        <div v-if="!photos.length">
+                          <el-skeleton
+                            animated>
+                            <template #template>
+                              <el-skeleton-item variant="image" style="width: 80px; height: 80px" />
+                            </template>
+                          </el-skeleton>
+                        </div>
+
+                        <div v-else class="flex justify-between items-center gap-2">
+                          <img
+                            v-for="photo in getPhotos(order)"
+                            :key="photo"
+                            :src="photo || useAsset('nophoto.jpg')" class="h-20 w-20" />
+                        </div>
+                      </dd>
+                    </dl>
+
                     <dl class="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
                       <dt class="text-base font-medium text-gray-500 dark:text-gray-400">№:</dt>
                       <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">
@@ -158,7 +180,7 @@
 </template>
   
 <script setup>
-import { reactive } from "vue"
+import { onMounted, ref } from "vue"
 
 defineProps({
   orders: Array
@@ -166,6 +188,7 @@ defineProps({
 
 const route = useRoute();
 
+const photos = ref([]);
 
 function formatDate(value) {
   return new Date(value)?.toLocaleDateString("ru", { hour: "2-digit", minute: "2-digit" })
@@ -173,6 +196,21 @@ function formatDate(value) {
 
 function formatPrice(value) {
   return value?.toLocaleString('ru', { style: "currency", currency: 'RUB' })
+}
+
+onMounted(() => {
+  const state = useMarketStore();
+  photos.value = state.photos;
+})
+
+function getPhotos(order) {
+  const ids = order.goods.map(item => item.id);
+
+  const urls = photos.value
+    .filter(data => ids.includes(data.JIRA_MARKET_ID))
+    .map(item => item.URL);
+
+  return urls.slice(0, 3);
 }
 
 </script>

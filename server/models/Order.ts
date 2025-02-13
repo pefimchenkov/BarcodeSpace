@@ -5,7 +5,10 @@ export interface OrderDocument extends Document {
     price: Number,
     date: Date,
     status: String,
+    payment: String,
+    delivery: String,
     goods: Array<Object>,
+    personal_data: Object,
 }
 
 const OrderSchema = new Schema({
@@ -25,10 +28,26 @@ const OrderSchema = new Schema({
         type: String,
     },
 
+    payment: {
+        type: String,
+    },
+
+    delivery: {
+        type: String,
+        required: true,
+    },
+
     goods: {
         type: Array,
         required: true,
     },
+
+    personal_data: {
+        type: Object,
+        required: true,
+    },
+
+    
 
 })
 

@@ -1,39 +1,94 @@
 <template>
     <div
         class="columns-2 flex">
-        <Filters />
-            <div class="p-2 w-full relative" >
-                <h1
-                    class="flex justify-center items-center text-xl m-5">
-                    Терминалы сбора данных ({{ terminals.length }} шт.)
+
+        <Filters
+            v-if="terminals.length"
+            :goods="terminals"
+            @searching="doFilters"
+        />
+
+        <aside v-else class="flex flex-col w-[22rem] px-5 py-8 gap-y-10  bg-white border-r rtl:border-r-0 rtl:border-l dark:bg-gray-900 dark:border-gray-700 custom-height">
+            <h1 class="text-xl text-center mb-8 text-gray-800 lg:text-2xl dark:text-white">Фильтры</h1>
+            <el-skeleton :rows="1" animated class="mt-3" />
+            <el-skeleton :rows="1" animated class="mt-1" />
+            <el-skeleton :rows="1" animated class="mt-1" />
+            <el-skeleton :rows="1" animated class="mt-1" />
+            <el-skeleton :rows="1" animated class="mt-1" />
+        </aside>
+
+        <div class="p-2 w-full" >
+            <div class="lg:flex justify-between items-center">
+                <h1 class="lg:flex justify-left items-center text-xl m-5 basis-1/2">
+                    Терминалы сбора данных ({{ filteredTerminals.length }} шт.)
                 </h1>
-                <div
-                    v-if="!terminals.length"
-                    class="text-center relative -translate-x-1/2 -translate-y-1/2 left-1/2"
-                    style="top: 40%">
-                    <Loader />
-                </div>
-                <Goods v-else :goods="terminals"></Goods>
+                <TextSearch
+                    v-if="terminals.length"
+                    class="basis-2/3"
+                    :goods="terminals"
+                    @searching="doSearch"
+                />
             </div>
+
+            <div
+                v-if="isVisible"
+                class="text-center relative -translate-x-1/2 -translate-y-1/2 left-1/2"
+                style="top: 40%">
+                <Loader />
+            </div>
+            <Goods :goods="filteredTerminals" />
+            
+        </div>
+
     </div>
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, reactive, computed, watch } from 'vue';
+
+const { getIntersection } = useFiltersStore();
 
 const terminals = ref([]);
+const filteredTerminals = ref([]);
+
+definePageMeta({
+  name: "terminals",
+  breadcrumbs: "Терминалы сбора данных",
+});
+
+const state = reactive({
+    searchData: [],
+    filtersData: [],
+});
+
+const isVisible = computed(() => {
+    return !filteredTerminals.value.length && Array.isArray(filteredTerminals.value)
+})
+
+watch(
+    () => ({ ...state }),
+    ({ searchData, filtersData }) => {
+        const ids = getIntersection(searchData, filtersData);
+        filteredTerminals.value = terminals.value.filter(item => ids.includes(item.marketid));
+    }
+)
 
 onMounted(() => {
     const { data } = useMarketStore();
-    terminals.value = data
+    filteredTerminals.value = terminals.value = data
         .filter(item => item.marketTypeID === 8)
-        .slice(0, 100)
+        .slice(0, 100);
 })
 
+function doFilters(data) {
+    state.filtersData = data;
+}
+
+function doSearch(data) {
+    state.searchData = data;
+}
 
 
-</script> 
 
-<style scoped>
 
-</style>
+</script>

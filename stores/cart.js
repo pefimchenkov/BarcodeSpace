@@ -17,14 +17,19 @@ export const useCartStore = defineStore('cart', {
             this.data = payload
         },
 
-        addData({ marketid, priceCLIENT, marketNAME,  }, qty = 1) {
+        addData(good, photo, qty = 1) {
+            const { marketid, priceCLIENT, marketNAME, marketTypeID } = good;
             const isInCart = this.data.find(item => item.id === marketid);
+
+            //console.log(good)
 
             const order = {
                 id: marketid,
                 name: marketNAME,
                 price: priceCLIENT,
                 qty: qty,
+                typeid: marketTypeID,
+                photo,
                 isInOrder: false
             }
 

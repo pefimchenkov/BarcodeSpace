@@ -7,11 +7,11 @@ export const useOrdersStore = defineStore('orders', {
 
   actions: {
 
-    async createOrder(userid: string, order: []) {
+    async createOrder(userid: string, order: [], personalData: Object, paymentMethod: String, deliveryMethod: String) {
       await useFetch('/api/order', {
         method: 'POST',
         watch: false,
-        body: { userid, order}
+        body: { userid, order, personalData, paymentMethod, deliveryMethod}
       })
     },
 

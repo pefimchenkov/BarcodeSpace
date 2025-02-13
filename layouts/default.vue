@@ -2,7 +2,7 @@
     <div id="app" class="min-h-screen">
       <NuxtLoadingIndicator />
       <Header />
-      <Breadcrumbs v-if="route" />
+      <!-- <Breadcrumbs v-if="route" /> -->
       <slot />
       <Footer class="sticky top-[100vh]" />
     </div>

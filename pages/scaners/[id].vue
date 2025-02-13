@@ -34,7 +34,7 @@
 
 <script setup>
 import useAsset from "~/composables/useAsset";
-import { onMounted, ref, toRaw } from 'vue';
+import { onMounted, ref } from 'vue';
 const route = useRoute();
 
 
@@ -48,7 +48,7 @@ onMounted(() => {
   const { data, status } = useMarketStore();
   
   goods.value = data;
-  good.value = data.find(item => item.marketid === Number(route.params.id));
+  good.value = data.find(item => item.marketid === +route.params.id);
   loadingStatus.value = status;
 
   definePageMeta({
@@ -59,7 +59,6 @@ onMounted(() => {
 
 async function gotoBack() {
     const { history } = useRouter().options;
-    console.log(history.push('/scaners'))
     await navigateTo(history.state.back);
 }
 </script>

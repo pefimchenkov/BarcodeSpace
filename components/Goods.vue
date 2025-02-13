@@ -114,7 +114,7 @@ NuxtLink
             <p class="text-2xl font-extrabold leading-tight text-gray-900 dark:text-white">{{ formatPrice(good.priceCLIENT )}} ₽</p>
 
             <button
-              @click="addData(good)"
+              @click="addData(good, (setPhoto(good.marketid) || useAsset('nophoto.jpg')))"
               type="button"
               class="bg-sky-500 inline-flex items-center rounded-md px-4 py-2.5 text-sm font-medium text-white hover:bg-sky-700 focus:outline-none focus:ring-4 focus:ring-primary-300 h-8"
             >

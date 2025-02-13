@@ -1,33 +1,92 @@
 <template>
     <div
         class="columns-2 flex">
-        <Filters />
-        <div class="p-2 w-full relative">
-            <h1 class="flex justify-center items-center text-xl m-5">
-                Принтеры этикеток ({{ printers.length }} шт.)
-            </h1>
+
+        <Filters
+            v-if="printers.length"
+            :goods="printers"
+            @searching="doFilters"
+        />
+
+        <aside v-else class="flex flex-col w-[22rem] px-5 py-8 gap-y-10  bg-white border-r rtl:border-r-0 rtl:border-l dark:bg-gray-900 dark:border-gray-700 custom-height">
+            <h1 class="text-xl text-center mb-8 text-gray-800 lg:text-2xl dark:text-white">Фильтры</h1>
+            <el-skeleton :rows="1" animated class="mt-3" />
+            <el-skeleton :rows="1" animated class="mt-1" />
+            <el-skeleton :rows="1" animated class="mt-1" />
+            <el-skeleton :rows="1" animated class="mt-1" />
+            <el-skeleton :rows="1" animated class="mt-1" />
+        </aside>
+
+        <div class="p-2 w-full" >
+            <div class="lg:flex justify-between items-center">
+                <h1 class="lg:flex justify-left items-center text-xl m-5 basis-1/2">
+                    Принтеры этикеток ({{ filteredPrinters.length }} шт.)
+                </h1>
+                <TextSearch
+                    v-if="printers.length"
+                    class="basis-2/3"
+                    :goods="printers"
+                    @searching="doSearch"
+                />
+            </div>
 
             <div
-                v-if="!printers.length"
+                v-if="isVisible"
                 class="text-center relative -translate-x-1/2 -translate-y-1/2 left-1/2"
                 style="top: 40%">
                 <Loader />
             </div>
-            <Goods :goods="printers" />
+            <Goods :goods="filteredPrinters" />
+            
         </div>
+
     </div>
 </template>
 
 <script setup>
+import { onMounted, ref, reactive, computed, watch } from 'vue';
 
-import { onMounted, ref } from 'vue';
+const { getIntersection } = useFiltersStore();
 
 const printers = ref([]);
+const filteredPrinters = ref([]);
+
+definePageMeta({
+  name: "printers",
+  breadcrumbs: "Принтеры этикеток",
+});
+
+const state = reactive({
+    searchData: [],
+    filtersData: [],
+});
+
+const isVisible = computed(() => {
+    return !filteredPrinters.value.length && Array.isArray(filteredPrinters.value)
+})
+
+watch(
+    () => ({ ...state }),
+    ({ searchData, filtersData }) => {
+        const ids = getIntersection(searchData, filtersData);
+        filteredPrinters.value = printers.value.filter(item => ids.includes(item.marketid));
+    }
+)
 
 onMounted(() => {
     const { data } = useMarketStore();
-    printers.value = data.filter(item => item.marketTypeID === 4);
+    filteredPrinters.value = printers.value = data.filter(item => item.marketTypeID === 4);
 })
+
+function doFilters(data) {
+    state.filtersData = data;
+}
+
+function doSearch(data) {
+    state.searchData = data;
+}
+
+
 
 
 </script>
