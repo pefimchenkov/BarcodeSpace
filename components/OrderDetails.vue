@@ -8,6 +8,7 @@
 
           <div
             v-for="good in order.goods"
+            :key="good.id"
             class="space-y-4 p-6">
             <div class="flex items-center gap-6">
               <div v-if="!photos.length">

@@ -189,6 +189,7 @@ function formatSklad(item) {
   return Number(item.marketATLAS + item.marketIM);
 }
 
+
 async function changePhoto(index) {
   filteredPhotos.forEach((photo, i) => {
     if (i === index) filteredPhotos[i].active = true;
