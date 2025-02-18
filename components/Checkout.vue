@@ -43,29 +43,35 @@
                 <div class="mb-2 flex items-center gap-2">
                   <label class="block text-sm font-medium text-gray-900 "> Страна <span class="text-red-500">*</span> </label>
                 </div>
-                <select
+                <el-select
                   v-model="personalData.country"
-                  class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700  dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500">
-                  <option>Россия</option>
-                </select>
+                >
+                  <el-option
+                    label="Россия"
+                    value="Россия"
+                  ></el-option>
+                </el-select>
               </div>
 
               <div>
                 <div class="mb-2 flex items-center gap-2">
                   <label class="block text-sm font-medium text-gray-900 "> Город <span class="text-red-500">*</span> </label>
                 </div>
-                <select
-                  v-if="cities.length"
+
+                <el-select
                   v-model="personalData.city"
-                  class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700  dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500">
-                  <option
+                  filterable
+                  allow-create
+                  
+                >
+                  <el-option
                     v-for="city in cities"
                     :key="city.id"
-                    :selected="city.selected"
+                    :label="city.title"
+                    :value="city.title"
                   >
-                    {{ city.title }}
-                  </option>
-                </select>
+                  </el-option>
+                </el-select>
               </div>
 
               <div>
@@ -152,7 +158,7 @@
                       v-model="paymentMethod"
                       type="radio"
                       name="payment-method"
-                      value="cash"
+                      value="наличными"
                       class="h-4 w-4 border-gray-300 bg-white text-primary-600 focus:ring-2 focus:ring-primary-600 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-primary-600"
                     />
                   </div>
@@ -177,7 +183,7 @@
                       v-model="paymentMethod"
                       type="radio"
                       name="payment-method"
-                      value="card"
+                      value="картой"
                       class="h-4 w-4 border-gray-300 bg-white text-primary-600 focus:ring-2 focus:ring-primary-600 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-primary-600"
                     />
                   </div>
@@ -203,7 +209,7 @@
                       v-model="paymentMethod"
                       type="radio"
                       name="payment-method"
-                      value="bill"
+                      value="по счёту"
                       class="h-4 w-4 border-gray-300 bg-white text-primary-600 focus:ring-2 focus:ring-primary-600 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-primary-600"
                     />
                   </div>
@@ -236,7 +242,7 @@
                       v-model="deliveryMethod"
                       type="radio"
                       name="delivery-method"
-                      value="pickup"
+                      value="самовывоз"
                       class="h-4 w-4 border-gray-300 bg-white text-primary-600 focus:ring-2 focus:ring-primary-600 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-primary-600" checked />
                   </div>
 
@@ -254,13 +260,13 @@
                       v-model="deliveryMethod"
                       type="radio"
                       name="delivery-method"
-                      value="courier"
+                      value="курьером"
                       class="h-4 w-4 border-gray-300 bg-white text-primary-600 focus:ring-2 focus:ring-primary-600 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-primary-600" />
                   </div>
 
                   <div class="ms-4 text-sm">
                     <label class="font-medium leading-none text-gray-900 "> Доставка курьером </label>
-                    <p class="mt-1 text-xs font-normal text-gray-500 dark:text-gray-400">по Москве - 500 р.</p>
+                    <p class="mt-1 text-xs font-normal text-gray-500 dark:text-gray-400">по Москве - 750 р.</p>
                   </div>
                 </div>
               </div>
@@ -272,7 +278,7 @@
                       v-model="deliveryMethod"
                       type="radio"
                       name="delivery-method"
-                      value="provider"
+                      value="транспортной компанией"
                       class="h-4 w-4 border-gray-300 bg-white text-primary-600 focus:ring-2 focus:ring-primary-600 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-primary-600" />
                   </div>
 
@@ -356,8 +362,8 @@ const { createOrder } = useOrdersStore();
 
 const discount = ref(0);
 const deliveryPrice = ref(0);
-const paymentMethod = ref('cash');
-const deliveryMethod = ref('pickup');
+const paymentMethod = ref('наличными');
+const deliveryMethod = ref('самовывоз');
 
 const personalData = reactive({
   name: '',
@@ -371,7 +377,7 @@ const personalData = reactive({
 });
 
 watch(() => (deliveryMethod.value), (val) => {
-  if (val === 'courier') {
+  if (val === 'курьером') {
     deliveryPrice.value = 750;
   } else {
     deliveryPrice.value = 0;
@@ -437,10 +443,23 @@ async function handleCreateOrder() {
 
 }
 
+
+
 async function gotoCart() {
   await navigateTo({ path: "/cart" })
 }
 
-
-
 </script>
+
+<style>
+  .el-select__wrapper {
+    min-height: 43px;
+    border-radius: 8px;
+    line-height: 1.25rem;
+    background-color: rgb(249 250 251);
+  }
+
+  .el-select__placeholder {
+    color: rgb(32, 32, 32);
+  }
+</style>

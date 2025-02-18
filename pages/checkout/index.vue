@@ -14,6 +14,6 @@
 
 const { data: goods } = useCartStore();
 
-if (!goods.length) await navigateTo('/')
+if (!goods.length) await navigateTo('/cart')
 
 </script>

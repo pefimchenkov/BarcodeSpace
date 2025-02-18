@@ -1,10 +1,10 @@
 <template>
   <section class="bg-white py-8 antialiased dark:bg-gray-900 md:py-16">
     <div class="mx-auto max-w-screen-xl px-4 2xl:px-0">
-      <h2 class="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">{{ "Детализация заказа №" + order._id }}</h2>
+      <h2 class="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">{{ "Детализация заказа № " + order._id }}</h2>
 
       <div class="mt-6 sm:mt-8 lg:flex lg:gap-8 ">
-        <div class="w-full divide-y divide-gray-200 overflow-hidden rounded-lg border border-gray-200 dark:divide-gray-700 dark:border-gray-700 lg:max-w-xl xl:max-w-2xl shadow-md">
+        <div class="w-full divide-y divide-gray-200 overflow-hidden rounded-lg border border-gray-200 dark:divide-gray-700 dark:border-gray-700 lg:max-w-xl xl:max-w-3xl shadow-md">
 
           <div
             v-for="good in order.goods"
@@ -82,9 +82,19 @@
           </div>
         </div>
 
+        <!-- История заказа -->
+
         <div class="mt-6 grow sm:mt-8 lg:mt-0">
-          <div class="space-y-6 rounded-lg border border-gray-200 bg-white p-6 shadow-md">
-            <h3 class="text-xl font-semibold text-gray-900">История движения</h3>
+          <div class="mb-3 space-y-6 rounded-lg border border-gray-200 bg-white p-6 shadow-md">
+            <div class="flex justify-between items-center">
+              <h3 class="text-xl font-semibold text-gray-900">История </h3>
+              <button
+                type="button"
+                class="rounded-lg border border-gray-400 bg-gray-100 px-5 py-2.5 text-sm font-medium text-gray-900 hover:bg-white hover:text-sky-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700">
+                Отмена заказа
+              </button>
+            </div>
+            
 
             <ol class="relative ms-7 border-s border-gray-300">
               <li class="mb-10 ms-8">
@@ -120,10 +130,10 @@
                   </svg>
                 </span>
                 <h4 class="mb-0.5 font-semibold">В пути</h4>
-                <p class="text-sm font-norma">{{ '10.01.25' }}</p>
+                <p class="text-sm font-normal">{{ '10.01.25' }}</p>
               </li>
 
-              <li class="mb-10 ms-8 text-primary-700 dark:text-primary-500">
+              <li class=" ms-8 text-primary-700 dark:text-primary-500">
                 <span class="absolute -start-4 flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 ring-8 ring-white border-2 border-gray-300"
                 :class="setStatusColor(order.status, 'Доставлен')">
                   <svg class="h-5 w-5 text-gray-500" aria-hidden="true" width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -131,24 +141,58 @@
                   </svg>
                 </span>
                 <h4 class="mb-0.5 text-base font-semibold">Доставлен</h4>
-                <p class="text-sm font-norma">{{ '22.01.25' }}</p>
+                <p class="text-sm font-normal">{{ '22.01.25' }}</p>
               </li>
 
             </ol>
-
-            <div class="gap-4 sm:flex sm:items-center">
-              <button
-                type="button"
-                class="w-full rounded-lg border border-gray-400 bg-gray-100 px-5 py-2.5 text-sm font-medium text-gray-900 hover:bg-white hover:text-sky-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700">
-                Отмена заказа
-              </button>
-
-            </div>
           </div>
+
+          <!-- Адрес доставки -->
+          <div class="space-y-6 rounded-lg border border-gray-200 bg-white p-6 shadow-md">
+            <h4 class="text-lg font-semibold text-gray-900 dark:text-white">Оплата и Доставка</h4>
+            <div class="mt-6 space-y-4 border-b border-t border-gray-200 py-6 dark:border-gray-700 sm:mt-8">
+                <dl>
+                  <dt class="text-base font-medium text-gray-900 dark:text-white flex justify-left items-center gap-4">
+                      <svg width="20" height="20" viewBox="0 0 14 14">
+                        <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M12 7.5v-2a1 1 0 0 0-1-1H1.5a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1H11a1 1 0 0 0 1-1V10M3.84 2L9.51.52a.49.49 0 0 1 .61.36L10.4 2"/>
+                          <rect width="3.5" height="2.5" x="10" y="7.5" rx=".5"/></g>
+                      </svg>
+                      <span>-</span>
+                      <span class="text-gray-500">{{ order.payment }}</span>
+ 
+                  </dt>
+                  <dt class="text-base font-medium text-gray-900 dark:text-white flex justify-left items-center gap-4">
+
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 32 32">
+                        <path fill="currentColor" d="m29.482 8.624l-10-5.5a1 1 0 0 0-.964 0l-10 5.5a1 1 0 0 0 0 1.752L18 15.591V26.31l-3.036-1.67L14 26.391l4.518 2.485a1 1 0 0 0 .964 0l10-5.5A1 1 0 0 0 30 22.5v-13a1 1 0 0 0-.518-.876M19 5.142L26.925 9.5L19 13.858L11.075 9.5Zm9 16.767l-8 4.4V15.59l8-4.4Z"/>
+                        <path fill="currentColor" d="M10 16H2v-2h8zm2 8H4v-2h8zm2-4H6v-2h8z"/>
+                      </svg>
+                      <span>-</span>
+                      <span class="text-gray-500">{{ order.delivery }}</span>
+
+                  </dt>
+
+                  <dd class="mt-3 text-base font-normal text-gray-500 dark:text-gray-400">
+                    {{ order.personal_data?.address }}
+                  </dd>
+                </dl>
+
+                <button
+                  type="button"
+                  disabled
+                  class="disabled:cursor-not-allowed disabled:text-sky-300 text-base font-medium text-sky-500 dark:text-sky-500"
+                >
+                  Редактировать
+                </button>
+              </div>
+          </div>
+
         </div>
+
       </div>
     </div>
-</section>
+  </section>
 </template>
 
 <script setup>
