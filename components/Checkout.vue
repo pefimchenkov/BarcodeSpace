@@ -2,6 +2,8 @@
   <section class="bg-white py-8 antialiased dark:bg-gray-900 md:py-16">
     <form @submit.prevent="handleCreateOrder" class="mx-auto max-w-screen-xl px-4 2xl:px-0">
 
+      {{ lastOrder.personal_data }}
+
         <el-steps
             :space="375"
             :active="1"
@@ -359,6 +361,8 @@
 import { ref, computed, reactive, onBeforeMount, watch } from 'vue'
 const { getData } = useCartStore();
 const { createOrder } = useOrdersStore();
+
+const { lastOrder } = defineProps(['lastOrder']);
 
 const discount = ref(0);
 const deliveryPrice = ref(0);

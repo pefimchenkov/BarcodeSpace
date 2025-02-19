@@ -17,7 +17,7 @@ NuxtLink
       <div>Извините, мы не нашли ни одного совпадения для Вас...</div>
     </div>
 
-    <div v-else class="mb-4 grid gap-4 sm:grid-cols-2 md:mb-8 lg:grid-cols-3 xl:grid-cols-4">
+    <div v-else class="mb-4 grid gap-4 sm:grid-cols-1 md:mb-8 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
 
       <div
         v-for="good in goods"
@@ -25,7 +25,7 @@ NuxtLink
         class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
         <div class="h-56 w-full">
           <NuxtLink :to="`/${route.name}/${good.marketid}`">
-            <img class="mx-auto h-full" :src="setPhoto(good.marketid) || `${useAsset('nophoto.jpg')}`" alt="" />
+            <img class="mx-auto h-full" :src="setPhoto(good.marketid) || `${useAsset('nophoto1.jpg')}`" alt="" />
           </NuxtLink>
         </div>
 
@@ -60,9 +60,13 @@ NuxtLink
             </div>
           </div>
 
-          <NuxtLink :to="`/${route.name}/${good.marketid}`" class="text-lg font-semibold leading-tight text-gray-900 hover:underline dark:text-white">{{ good.marketNAME }}</NuxtLink>
+          <NuxtLink
+            :to="`/${route.name}/${good.marketid}`"
+            class="sm:text-sm md:text-lg lg:text-lg  font-semibold leading-tight text-gray-900 hover:underline dark:text-white">
+            {{ good.marketNAME }}
+          </NuxtLink>
 
-          <div class="flex justify-between items-end">
+          <div class="flex w-full justify-between items-end absolute bottom-12">
             <div class="mt-2 flex items-center gap-2">
               <div class="flex items-center">
                 <svg class="h-4 w-4 text-yellow-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
@@ -89,11 +93,13 @@ NuxtLink
               <p class="text-sm font-medium text-gray-900 dark:text-white">5.0</p><p class="text-sm font-medium text-gray-500 dark:text-gray-400">(455)</p>
             </div>
 
-            <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Склад: {{ formatSklad(good) }}</p>
+            <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Склад:
+              <span :class="{ 'text-red-500': formatSklad(good) === 0, 'text-green-600': formatSklad(good) !== 0 }">{{ formatSklad(good) }}</span>
+            </p>
 
           </div>
 
-          <ul class="mt-2 flex items-center gap-4 justify-between">
+          <!-- <ul class="mt-2 flex items-center gap-4 justify-between">
             <li class="flex items-center gap-2">
               <svg class="h-4 w-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h6l2 4m-8-4v8m0-8V6a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v9h2m8 0H9m4 0h2m4 0h2v-4m0 0h-5m3.5 5.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Zm-10 0a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Z" />
@@ -107,7 +113,7 @@ NuxtLink
               </svg>
               <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Лучшая цена</p>
             </li>
-          </ul>
+          </ul> -->
 
           <!-- строка с корзиной -->
           <div class="mt-4 flex items-center justify-between gap-4 bottom">

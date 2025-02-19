@@ -180,7 +180,9 @@
 <script setup>
 import { ref, computed } from 'vue'
 import useAsset from "~/composables/useAsset";
+import { ElMessageBox } from 'element-plus';
 const { getData, removeData } = useCartStore();
+
 
 /* definePageMeta({
   breadcrumbs: "Корзина"
@@ -189,7 +191,15 @@ const { getData, removeData } = useCartStore();
 const discount = ref(0);
 
 async function removeItem(id) {
-    removeData(id);
+  ElMessageBox.confirm('Вы уверены, продолжаем?', 'Удаление', {
+          confirmButtonText: "Да",
+          cancelButtonText: "Нет",
+          type: "warning"
+        })
+    .then(_ => {
+      removeData(id);
+    })
+    .catch(err => console.log(err));
 }
 
 const calcTotal = computed(() => {

@@ -64,8 +64,7 @@
           <div class="mt-6 sm:gap-4 sm:items-center sm:flex sm:mt-8">
             <div class="flex items-center py-2.5 text-sm font-medium">
               <label for="counter-input" class="">Количество:</label>
-              <el-input-number v-model="qty" size="large" :min="0" :max="1000" class="ml-2">
-              </el-input-number>
+              <el-input-number v-model="qty" size="large" :min="0" :max="formatSklad(good)" class="ml-2"></el-input-number>
             </div>
 
             <a

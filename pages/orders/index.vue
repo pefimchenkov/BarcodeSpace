@@ -14,20 +14,17 @@
 </template>
 
 <script setup>
-import { ref, toRaw } from 'vue';
+import { ref, onBeforeMount } from 'vue';
 
 const auth = useAuth();
 const { user } = await auth.getSession();
+
+const { getOrdersByUser } = useOrdersStore();
 const orders = ref([]);
 
-async function getOrders() {
-    return await useFetch('/api/orders', {
-        method: 'POST',
-        body: { userid: user._id }
-    })
-}
 
-const { data } = await getOrders();
-orders.value = toRaw(data.value);
+onBeforeMount(async () => {
+    orders.value = await getOrdersByUser(user._id)
+})
 
 </script>
