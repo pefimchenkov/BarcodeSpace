@@ -34,9 +34,6 @@ export default defineNuxtConfig({
     },
     isEnabled: true,
     disableServerSideAuth: false,
-    sessionRefresh: {
-      enablePeriodically: true,
-    }
   },
 
   runtimeConfig: {

@@ -12,14 +12,24 @@
 </template>
 
 <script setup>
-const { data: goods } = useCartStore();
-const { getLastOrderByUser } = useOrdersStore();
 const auth = useAuth();
 const { user } = await auth.getSession();
 
-const lastOrder = await getLastOrderByUser(user._id)
+let goods = ref([]);
+let lastOrder = ref({})
 
+if (user) {
+    const { data } = useCartStore();
+    goods.value = data;
+    const { getLastOrderByUser } = useOrdersStore();
+    lastOrder = await getLastOrderByUser(user._id)
 
-if (!goods.length) await navigateTo('/cart')
+    if (!goods.value.length) {
+        await navigateTo('/cart')
+    }
+    
+} else {
+    await navigateTo('/login');
+}
 
 </script>

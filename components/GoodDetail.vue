@@ -96,54 +96,60 @@
 
           <hr class="my-6 md:my-8 border-gray-200 dark:border-gray-800" />
 
-          <div class="flex gap-x-12 items-center mb-5">
-            <div>
-              <div class="text-lg font-semibold mb-1">Партномер</div>
-              <div
-                class="bg-gray-100 text-gray-800 min-w-[145px] min-h-[30px] text-md font-medium me-2 px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-gray-400 border border-gray-500">
+          <div class="mb-5">
+            <div class="flex gap-14">
+              <!-- class="bg-gray-100 text-gray-800 min-w-[145px] min-h-[30px] text-md font-medium me-2 px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-gray-400 border border-gray-500" -->
+              <div class="text-lg text-gray-500">Партномер</div>
+              <div class="text-lg">
                 {{ good.marketPN }}
               </div>
             </div>
 
-            <div>
-              <p class="text-lg font-semibold mb-1">Артикул</p>
-              <div
-                class="bg-gray-100 text-gray-800 min-w-[145px] min-h-[30px] text-md font-medium me-2 px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-gray-400 border border-gray-500">
+            <hr class="mt-1 mb-1" />
+
+            <div class="flex gap-[80px]">
+              <div class="text-lg text-gray-500">Артикул</div>
+              <div class="text-lg">
                 {{ "BCS-" + route.params.id }}
               </div>
             </div>
-            <div>
-              <div class="text-lg font-semibold mb-1">Модели</div>
-              <div
-                class="bg-gray-100 text-gray-800 text-md min-w-[145px] min-h-[30px] font-medium me-2 px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-gray-400 border border-gray-500">
+
+            <hr class="mt-1 mb-1" />
+
+            <div class="flex gap-[85px]">
+              <div class="text-lg text-gray-500">Модели</div>
+              <div class="text-lg">
                 {{ good.marketMODELS }}
               </div>
             </div>
-          </div>
 
-          <div class="flex gap-x-12 items-center">
-            <div>
-              <div class="text-lg font-semibold mb-1">Состояние</div>
-              <div
-                class="bg-gray-100 text-gray-800 min-w-[145px] min-h-[30px] text-md font-medium me-2 px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-gray-400 border border-gray-500">
+            <hr class="mt-1 mb-1" />
+
+            <div class="flex gap-[63px]">
+              <div class="text-lg text-gray-500">Состояние</div>
+              <div class="text-lg">
                 {{ good.marketCOND }}
               </div>
             </div>
 
-            <div>
-              <p class="text-lg font-semibold mb-1">Класс</p>
-              <div
-                class="bg-gray-100 text-gray-800 min-w-[145px] min-h-[30px] text-md font-medium me-2 px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-gray-400 border border-gray-500">
+            <hr class="mt-1 mb-1" />
+
+            <div class="flex gap-[103px]">
+              <div class="text-lg text-gray-500">Класс</div>
+              <div class="text-lg">
                 {{ good.marketCLASS }}
               </div>
             </div>
-            <div>
-              <p class="text-lg font-semibold mb-1">Склад</p>
-              <div
-                class="bg-gray-100 text-gray-800 min-w-[145px] min-h-[30px] text-md font-medium me-2 px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-gray-400 border border-gray-500">
+
+            <hr class="mt-1 mb-1" />
+
+            <div class="flex gap-[63px]">
+              <div class="text-lg text-gray-500">В наличии</div>
+              <div class="text-lg">
                 {{ formatSklad(good) }}
               </div>
             </div>
+
           </div>
 
           <hr class="my-6 md:my-8 border-gray-200 dark:border-gray-800" />

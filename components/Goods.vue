@@ -93,7 +93,7 @@ NuxtLink
               <p class="text-sm font-medium text-gray-900 dark:text-white">5.0</p><p class="text-sm font-medium text-gray-500 dark:text-gray-400">(455)</p>
             </div>
 
-            <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Склад:
+            <p class="text-md font-medium text-gray-500 dark:text-gray-400">Склад:
               <span :class="{ 'text-red-500': formatSklad(good) === 0, 'text-green-600': formatSklad(good) !== 0 }">{{ formatSklad(good) }}</span>
             </p>
 

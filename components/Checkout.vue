@@ -2,8 +2,6 @@
   <section class="bg-white py-8 antialiased dark:bg-gray-900 md:py-16">
     <form @submit.prevent="handleCreateOrder" class="mx-auto max-w-screen-xl px-4 2xl:px-0">
 
-      {{ lastOrder.personal_data }}
-
         <el-steps
             :space="375"
             :active="1"
@@ -24,6 +22,7 @@
                 <label class="mb-2 block text-sm font-medium text-gray-900 "> Ваше имя <span class="text-red-500">*</span></label>
                 <input
                   v-model="personalData.name"
+                  :key="personalData.name"
                   type="text"
                   class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700  dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
                   placeholder="Иванов Иван Иванович"
@@ -35,6 +34,7 @@
                 <label class="mb-2 block text-sm font-medium text-gray-900 "> Ваш email <span class="text-red-500">*</span></label>
                 <input
                   v-model="personalData.email"
+                  :key="personalData.email"
                   type="email"
                   class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700  dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
                   placeholder="name@domen.ru"
@@ -292,8 +292,9 @@
               </div>
             </div>
           </div>
-
         </div>
+
+        <!-- Карточка ИТОГО -->
 
         <div class="mt-6 w-full space-y-6 sm:mt-8 lg:mt-0 lg:max-w-xs xl:max-w-md">
           <div class="mt-11">
@@ -358,6 +359,7 @@
 </template>
 
 <script setup>
+
 import { ref, computed, reactive, onBeforeMount, watch } from 'vue'
 const { getData } = useCartStore();
 const { createOrder } = useOrdersStore();
@@ -366,18 +368,18 @@ const { lastOrder } = defineProps(['lastOrder']);
 
 const discount = ref(0);
 const deliveryPrice = ref(0);
-const paymentMethod = ref('наличными');
-const deliveryMethod = ref('самовывоз');
+const paymentMethod = ref(lastOrder.payment || 'наличными');
+const deliveryMethod = ref(lastOrder.delivery || 'самовывоз');
 
-const personalData = reactive({
-  name: '',
-  email: '',
-  phone: '',
-  country: 'Россия',
-  city: 'Москва',
-  address: '',
-  postIndex: '',
-  mailing: ''
+let personalData = reactive({
+  name: lastOrder.personal_data.name || '',
+  email: lastOrder.personal_data.email || '',
+  phone: lastOrder.personal_data.phone || '',
+  country: lastOrder.personal_data.country || 'Россия',
+  city: lastOrder.personal_data.city || 'Москва',
+  address: lastOrder.personal_data.address || '',
+  postIndex: lastOrder.personal_data.postIndex || '',
+  mailing: lastOrder.personal_data.mailing || ''
 });
 
 watch(() => (deliveryMethod.value), (val) => {
@@ -403,11 +405,6 @@ onBeforeMount(async () => {
 })
 
 
-
-
-
-
-
 /* ************** */
 
 function formatPrice(price) {
@@ -415,7 +412,10 @@ function formatPrice(price) {
 }
 
 function calcSum() {
-    return getData().reduce((acc, { price, qty }) => { return (acc + (price * qty)) }, 0);
+    const cart = getData();
+    return cart
+      .filter(item => item.isInOrder)
+      .reduce((acc, { price, qty }) => { return (acc + (price * qty)) }, 0);
 }
 
 

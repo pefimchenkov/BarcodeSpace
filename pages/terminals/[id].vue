@@ -1,6 +1,7 @@
 <template>
   <div
-      class="h-[85dvh] flex justify-center items-center">
+      :class="{ 'h-[77dvh]': !goods.length }"
+      class="flex justify-center items-center">
 
       <div
           v-if="loadingStatus !== 'success'"

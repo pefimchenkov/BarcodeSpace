@@ -27,11 +27,13 @@ export const useOrdersStore = defineStore('orders', {
         return ElNotification({ type: "error", message: "Данный заказа отсутствует в системе" })
       }
 
+      console.log(userid)
+
       const { status, data } = await useFetch('/api/orders', {
         method: 'POST',
         body: { userid, action: "get_all" }
       });
-
+      
       this.data =  data?.value;
       return data?.value;
 
