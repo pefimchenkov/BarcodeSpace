@@ -7,13 +7,18 @@ export const useMarketStore = defineStore('market', {
         models: [],
         classes: [],
         conditions: [],
+        types: [
+            {id: 8, name: 'terminals' },
+            {id: 5, name: 'scaners' },
+            {id: 4, name: 'printers' },
+        ],
         status: 'pending'
     }),
 
     actions: {
         async getData() {
             if (this.data.length) {
-                console.log('market has been loaded yet!')
+                console.log('market has been already loaded!')
                 return this.data;
             }
 
@@ -22,34 +27,26 @@ export const useMarketStore = defineStore('market', {
             this.data = data.value;
             this.status = status.value;
 
-            //console.log('Success Data from MarketStore: ', data.value.length);
             return this.data;
         },
 
         async getPhotos() {
             if (this.photos.length) {
-                console.log('photos has been loaded yet!')
+                console.log('photos has been already loaded!')
                 return this.photos;
             }
 
             const { data } = await useFetch('/api/photos');
             this.photos = data.value;
 
-            //console.log('Success Photos from MarketStore: ', data.value.length);
             return this.photos;
         },
 
-        async getModels() {
-            if (this.models.length) {
-                console.log('models has been loaded yet!')
-                return this.models;
-            }
+        getTypeById(id) {
+            const obj = this.types.find(item => item.id === id)
+            if (!obj) return 'parts';
 
-            const { data } = await useFetch('/api/models');
-            this.models = data.value;
-
-            //console.log('Success Models from MarketStore: ', data.value.length);
-            return this.models;
+            return obj.name;
         },
 
 

@@ -156,7 +156,7 @@
 
           <h1 class="text-lg font-semibold mb-2">Описание:</h1>
           <p class="mb-6 text-gray-500 dark:text-gray-400">
-            {{ good.marketDESC }}
+            {{ good.marketDESC || 'На данный момент отсутствует' }}
           </p>
         </div>
       </div>

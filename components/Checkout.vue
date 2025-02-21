@@ -22,7 +22,6 @@
                 <label class="mb-2 block text-sm font-medium text-gray-900 "> Ваше имя <span class="text-red-500">*</span></label>
                 <input
                   v-model="personalData.name"
-                  :key="personalData.name"
                   type="text"
                   class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700  dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
                   placeholder="Иванов Иван Иванович"
@@ -34,7 +33,6 @@
                 <label class="mb-2 block text-sm font-medium text-gray-900 "> Ваш email <span class="text-red-500">*</span></label>
                 <input
                   v-model="personalData.email"
-                  :key="personalData.email"
                   type="email"
                   class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700  dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
                   placeholder="name@domen.ru"
@@ -91,7 +89,7 @@
                 <label for="vat_number" class="mb-2 block text-sm font-medium text-gray-900 "> Почтовый индекс <span class="text-red-500">*</span> </label>
                 <input
                   v-model="personalData.postIndex"
-                  type="text"
+                  type="number"
                   class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700  dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
                   placeholder="112233"
                   required
@@ -112,13 +110,13 @@
                       </svg>
                   </button>
 
-                  <div class="relative w-full"> <!-- pattern="\([0-9]{3}\)[0-9]{3}-[0-9]{2}-[0-9]{2}" -->
+                  <div class="relative w-full"> <!--  -->
                       <input
                           v-model="personalData.phone"
                           type="text"
-                          id="phone-input"
                           class="z-20 block w-full rounded-e-lg border border-s-0 border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:border-s-gray-700  dark:bg-gray-700  dark:placeholder:text-gray-400 dark:focus:border-primary-500"
                           required
+                          pattern="\([0-9]{3}\)[0-9]{3}-[0-9]{2}-[0-9]{2}"
                           placeholder="(999)123-45-67"
                       />
                   </div>
@@ -211,14 +209,14 @@
                       v-model="paymentMethod"
                       type="radio"
                       name="payment-method"
-                      value="по счёту"
+                      value="безналичная"
                       class="h-4 w-4 border-gray-300 bg-white text-primary-600 focus:ring-2 focus:ring-primary-600 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-primary-600"
                     />
                   </div>
 
                   <div class="ms-4 text-sm">
-                    <label for="paypal-2" class="font-medium leading-none text-gray-900 "> Оплата по счёту </label>
-                    <p id="paypal-text" class="mt-1 text-xs font-normal text-gray-500 dark:text-gray-400">Безналичная оплата для Юр Лиц</p>
+                    <label class="font-medium leading-none text-gray-900 ">Безналичная оплата</label>
+                    <p class="mt-1 text-xs font-normal text-gray-500 dark:text-gray-400">Оплата по счёту для Юр Лиц</p>
                   </div>
                 </div>
 
@@ -230,6 +228,10 @@
               </div>
             </div>
           </div>
+
+          <!-- Реквизиты для оплаты по счёту -->
+
+          <organisation-form v-if="paymentMethod === 'безналичная'" />
 
           <!-- Доставка -->
 
@@ -429,8 +431,10 @@ async function handleCreateOrder() {
 
     if (!user) return ElNotification({ type: "error", message: "Войдите или зарегистрируйтесь, пожалуйста." });
 
+    console.log(order)
 
-    await createOrder(
+
+    /* await createOrder(
       user._id,
       order,
       personalData,
@@ -438,7 +442,7 @@ async function handleCreateOrder() {
       deliveryMethod
     );
     
-    await navigateTo('/confirmation')
+    await navigateTo('/confirmation') */
   }
   catch(error) {
     console.log('error from create order', error)

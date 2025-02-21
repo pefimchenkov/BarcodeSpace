@@ -1,46 +1,51 @@
 <template>
     <div class="hidden xl:mt-8 xl:block">
         <h3 class="text-2xl font-semibold text-gray-900 dark:text-white">Рекомендуем также</h3>
+
         <div class="mt-6 grid grid-cols-3 gap-4 sm:mt-8">
+
             <div
-                v-for="(item, i) in 3"
-                :key="i"
-                class="space-y-6 overflow-hidden rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
-                <a href="#" class="overflow-hidden rounded">
-                    <img class="mx-auto h-44 w-44 dark:hidden" src="https://flowbite.s3.amazonaws.com/blocks/e-commerce/imac-front.svg" alt="imac image" />
-                    <img class="mx-auto hidden h-44 w-44 dark:block" src="https://flowbite.s3.amazonaws.com/blocks/e-commerce/imac-front-dark.svg" alt="imac image" />
-                </a>
+                v-for="item in selected"
+                :key="item.marketid"
+                class="flex flex-col space-y-6 overflow-hidden rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
+
+                <NuxtLink :to="`/${getTypeById(item.marketTypeID)}/${item.marketid}`" class="overflow-hidden rounded">
+                    <img class="mx-auto h-44 w-44 dark:hidden" :src="setPhoto(item.marketid) || useAsset('noproduct.png')" :alt="item?.marketNAME" />
+                </NuxtLink>
 
                 <div>
-                    <a href="#" class="text-lg font-semibold leading-tight text-gray-900 hover:underline dark:text-white">iMac 27”</a>
-                    <p class="mt-2 text-base font-normal text-gray-500 dark:text-gray-400">This generation has some improvements, including a longer continuous battery life.</p>
+                    <NuxtLink :to="`/${getTypeById(item.marketTypeID)}/${item.marketid}`"
+                        class="text-md font-semibold leading-tight text-gray-700 hover:underline"
+                        style="display: inline-flex; height: 70px;">
+                        {{ item?.marketNAME }}
+                    </NuxtLink>
+                   <!--  <p class="mt-2 text-base font-normal text-gray-500 dark:text-gray-400">{{ item?.marketDESC }}</p> -->
                 </div>
 
                 <div>
                     <p class="text-lg font-bold text-gray-900 dark:text-white">
-                    <span class="line-through"> $399,99 </span>
+                    <span class="line-through">{{ formatPrice(item?.priceCLIENT + 500) }}</span>
                     </p>
-                    <p class="text-lg font-bold leading-tight text-red-600 dark:text-red-500">$299</p>
+                    <p class="text-lg font-bold leading-tight text-red-600 dark:text-red-500">{{ formatPrice(item?.priceCLIENT)}}</p>
                 </div>
 
-                <div class="mt-6 flex items-center gap-2.5">
+                <div class="flex items-center justify-between gap-2.5">
                     <button
                         data-tooltip-target="favourites-tooltip-1"
                         type="button"
                         class="inline-flex items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white p-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-sky-700 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:ring-gray-700">
-                    <svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6C6.5 1 1 8 5.8 13l6.2 7 6.2-7C23 8 17.5 1 12 6Z"></path>
-                    </svg>
+                        <svg class="h-5 w-5" aria-hidden="true" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6C6.5 1 1 8 5.8 13l6.2 7 6.2-7C23 8 17.5 1 12 6Z"></path>
+                        </svg>
                     </button>
-                    <div id="favourites-tooltip-1" role="tooltip" class="tooltip invisible absolute z-10 inline-block rounded-lg bg-gray-900 px-3 py-2 text-sm font-medium text-white opacity-0 shadow-sm transition-opacity duration-300 dark:bg-gray-700">
-                        В избранное
-                    <div class="tooltip-arrow" data-popper-arrow></div>
-                    </div>
-                    <button type="button" class="inline-flex w-full items-center justify-center rounded-lg bg-sky-500 px-5 py-2.5 text-sm font-medium  text-white hover:bg-sky-600 focus:outline-none focus:ring-4 focus:ring-sky-300 dark:bg-sky-500 dark:hover:bg-sky-600 dark:focus:ring-sky-800">
-                    <svg class="-ms-2 me-2 h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+
+                    <button
+                        @click="addData(item, (setPhoto(item.marketid) || useAsset('nophoto.jpg')))"
+                        type="button"
+                        class="inline-flex items-center justify-center rounded-lg bg-sky-500 px-5 py-2.5 text-sm font-medium  text-white hover:bg-sky-600 focus:outline-none focus:ring-4 focus:ring-sky-300 dark:bg-sky-500 dark:hover:bg-sky-600 dark:focus:ring-sky-800">
+                        <svg class="h-5 w-5" aria-hidden="true"  width="24" height="24" fill="none" viewBox="0 0 24 24">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 4h1.5L9 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-8.5-3h9.25L19 7h-1M8 7h-.688M13 5v4m-2-2h4" />
-                    </svg>
-                    В корзину
+                        </svg>
                     </button>
                 </div>
             </div>
@@ -50,4 +55,41 @@
 </template>
 
 <script setup>
+import { ref } from "vue";
+
+const selected = ref([]);
+const { data, getTypeById } = useMarketStore();
+const { photos } = useMarketStore();
+const { addData } = useCartStore();
+const route = useRoute();
+
+
+const min = 1;
+const last = data[data.length -1];
+const max = data.indexOf(last);
+const random = generateRandomNumbers(min, max);
+
+selected.value.push(data[random]);
+selected.value.push(data[generateRandomNumbers(min, random)]);
+selected.value.push(data[generateRandomNumbers(random, max)]);
+
+function setPhoto(id) {
+  const photo = photos.find(item => item.JIRA_MARKET_ID === id);
+  return photo?.URL
+}
+
+function generateRandomNumbers(min, max) {
+    return Math.floor(Math.random() * (max - min - 1)) + min;
+}
+
+function formatPrice(price) {
+  return price?.toLocaleString("ru", { style: "currency", currency: "RUB" });
+}
+
+
 </script>
+
+<style scoped>
+
+
+</style>

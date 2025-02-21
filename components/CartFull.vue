@@ -14,8 +14,6 @@
     </el-steps>
 
 
-      <h2 class="text-xl font-semibold text-gray-900 text-end dark:text-white sm:text-2xl">Корзина</h2>
-
       <div class="mt-6 sm:mt-8 md:gap-6 lg:flex lg:items-start xl:gap-8">
         <div class="mx-auto w-full flex-none lg:max-w-2xl xl:max-w-4xl">
 
@@ -72,7 +70,7 @@
                     {{ item.name }}
                   </NuxtLink>
 
-                  <div>Цена за шт. - {{ item.price }}</div>
+                  <div>Цена за шт. - {{ formatPrice(item.price) }}</div>
 
                   <div class="flex items-center gap-4">
                     <button type="button" class="inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-900 hover:underline dark:text-gray-400 dark:hover:text-white">
@@ -99,7 +97,33 @@
           </div>
 
           <!-- Рекомендации -->
-          <Recommend />
+          <div v-if="!getData().length" class="flex justify-between items-center mt-5">
+                <el-skeleton
+                    v-for="i in 3"
+                    style="width: 240px"
+                    animated>
+                    <template #template>
+                        <el-skeleton-item variant="image" style="width: 240px; height: 240px" />
+                        <div style="padding: 14px">
+                        <el-skeleton-item variant="h3" style="width: 50%" />
+                        <div
+                            style="
+                            display: flex;
+                            align-items: center;
+                            justify-items: space-between;
+                            margin-top: 16px;
+                            height: 16px;
+                            "
+                        >
+                            <el-skeleton-item variant="text" style="margin-right: 16px" />
+                            <el-skeleton-item variant="text" style="width: 30%" />
+                        </div>
+                        </div>
+                    </template>
+                </el-skeleton>
+            </div>
+
+          <Recommend v-else />
           <!-- ************ -->
 
         </div>
